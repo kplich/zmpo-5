@@ -3,7 +3,7 @@
 #include <string>
 
 
-KnapsackProblem::KnapsackProblem(unsigned int capacity, std::vector<std::pair<unsigned int, unsigned int>*>* items)
+KnapsackProblem::KnapsackProblem(int capacity, std::vector<std::pair<int, int>*>* items)
 {
 	this->capacity = capacity;
 	this->items = items;
@@ -29,12 +29,12 @@ KnapsackProblem::KnapsackProblem(std::ifstream* source_file)
 	if (!load_from_file(source_file))
 	{
 		capacity = 0;
-		items = new std::vector<std::pair<unsigned int, unsigned int>*>();
+		items = new std::vector<std::pair<int, int>*>();
 		valid = false;
 	}
 }
 
-unsigned int KnapsackProblem::get_number_of_items()
+int KnapsackProblem::get_number_of_items()
 {
 	return items->size();
 }
@@ -63,18 +63,19 @@ bool KnapsackProblem::load_from_file(std::ifstream* source_file)
 	}
 
 	//TODO: more numbers might be declared here
-	unsigned int capacity = std::stoi(first_line);
+	int capacity = std::stoi(first_line);
 
 	//parse sizes and values
-	std::vector<std::pair<unsigned int, unsigned int>*>* result = new std::vector<std::pair<unsigned int, unsigned int>*>();
+	std::vector<std::pair<int, int>*>* result = new std::vector<std::pair<int, int>*>();
 
-	unsigned int temp_size;
-	unsigned int temp_value;
+	int temp_size;
+	int temp_value;
 	do
 	{
 		//TODO: maybe better to read this line by line?
+		//TODO: also check for negative values!
 		*source_file >> temp_size >> temp_value;
-		std::pair<unsigned int, unsigned int>* next_pair = new std::pair<unsigned int, unsigned int>(temp_size, temp_value);
+		std::pair<int, int>* next_pair = new std::pair<int, int>(temp_size, temp_value);
 		result->push_back(next_pair);
 	} while (source_file->good()); //TODO: is that a proper way to loop a stream?
 

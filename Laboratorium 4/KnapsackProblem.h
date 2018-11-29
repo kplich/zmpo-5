@@ -9,14 +9,17 @@
  * Items aren't stored in map, because ordering of items is
  * an important issue that can significantly alter the solution quality.
  */
+
+//TODO: unsigned int might not be such a good idea here! (not type safety, just overflow!)
+
 class KnapsackProblem
 {
 public:
 	KnapsackProblem(std::ifstream* source_file);
-	KnapsackProblem(unsigned int capacity, std::vector<std::pair<unsigned int, unsigned int>*>* items);
+	KnapsackProblem(int capacity, std::vector<std::pair<int, int>*>* items);
 	~KnapsackProblem();
 
-	unsigned int get_number_of_items();
+	int get_number_of_items();
 
 	/**
 	 * Checks for validity of instance.
@@ -35,7 +38,7 @@ private:
 	/**
 	 * Maximal size of items that can be chosen.
 	 */
-	unsigned int capacity;
+	int capacity;
 
 	/**
 	 * Validity of an instance.
@@ -47,7 +50,7 @@ private:
 	 * to choose from. Size of this vector corresponds to the number
 	 * of items to choose from.
 	 */
-	std::vector<std::pair<unsigned int, unsigned int>*>* items;
+	std::vector<std::pair<int, int>*>* items;
 
 	/**
 	 * \brief Method attempting to load data for the problem from file.
