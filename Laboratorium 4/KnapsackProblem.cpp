@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "KnapsackProblem.h"
 #include <string>
+#include <sstream>
 
 
 KnapsackProblem::KnapsackProblem(int capacity, std::vector<std::pair<int, int>*>* items)
@@ -44,6 +45,22 @@ bool KnapsackProblem::is_valid()
 	return valid;
 }
 
+std::string KnapsackProblem::to_string()
+{
+	std::stringstream sstream;
+
+	sstream << "Knapsack capacity: " << capacity << "\n";
+
+	for(int i = 0; i<get_number_of_items(); i++)
+	{
+		sstream << "item " << i;
+		sstream << "\tsize: " << items->at(i)->first;
+		sstream << "\tvalue: " << items->at(i)->second << "\n";
+	}
+
+	return sstream.str();
+}
+
 bool KnapsackProblem::load_from_file(std::ifstream* source_file)
 {
 	if(!source_file->is_open())
@@ -74,6 +91,7 @@ bool KnapsackProblem::load_from_file(std::ifstream* source_file)
 	{
 		//TODO: maybe better to read this line by line?
 		//TODO: also check for negative values!
+		//TODO: sensitive to newlines at the end of the file!
 		*source_file >> temp_size >> temp_value;
 		std::pair<int, int>* next_pair = new std::pair<int, int>(temp_size, temp_value);
 		result->push_back(next_pair);

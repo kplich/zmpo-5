@@ -29,6 +29,8 @@ public:
 	 */
 	bool is_valid();
 
+	std::string to_string();
+
 	//TODO: bool is_empty?
 
 	//TODO: translate an individual into a more readable solution
