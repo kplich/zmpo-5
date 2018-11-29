@@ -6,6 +6,8 @@
 
 Individual::Individual(int size)
 {
+	this->size = size;
+
 	std::random_device device;
 	std::mt19937 generator(device());
 	std::uniform_int_distribution<> distribution(0, 1);
@@ -28,9 +30,9 @@ Individual::~Individual()
 	delete[] genotype;
 }
 
-int Individual::evaluate_fitness(std::vector<std::pair<int, int>*>* items)
+int Individual::evaluate_fitness(int capacity, std::vector<std::pair<int, int>*>* items)
 {
-	int result;
+	int result = 0;
 
 	for(int i = 0; i < size; i++)
 	{
@@ -39,6 +41,12 @@ int Individual::evaluate_fitness(std::vector<std::pair<int, int>*>* items)
 			result += items->at(i)->second;
 		}
 	}
+
+	if(result > capacity)
+	{
+		result = 0;
+	}
+
 	return result;
 }
 
@@ -56,7 +64,7 @@ void Individual::mutate(double mutation_probability)
 	}
 }
 
-std::pair<Individual*, Individual*>* Individual::crossover(Individual* other, double crossover_probability)
+std::pair<Individual*, Individual*> Individual::crossover(Individual* other, double crossover_probability)
 {
 	std::random_device device;
 	std::mt19937 generator(device());
@@ -78,6 +86,7 @@ std::pair<Individual*, Individual*>* Individual::crossover(Individual* other, do
 		}
 	}
 	std::pair<Individual*, Individual*>	result(first, second);
+	return result;
 }
 
 std::string Individual::to_string()
@@ -90,6 +99,8 @@ std::string Individual::to_string()
 	{
 		sstream << genotype[i] << "  ";
 	}
+
+	sstream << "\n";
 
 	return sstream.str();
 }
