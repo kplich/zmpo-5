@@ -1,5 +1,8 @@
 #pragma once
 #include <vector>
+#include "KnapsackProblem.h"
+
+//TODO: idea for later: maybe keep fitness as a variable?
 
 class Individual
 {
@@ -10,8 +13,7 @@ public:
 
 	Individual& operator= (const Individual& other);
 
-	//TODO: add problem instance to parameter list
-	int evaluate_fitness();
+	int evaluate_fitness(KnapsackProblem* problem_instance);
 
 	void mutate(double mutation_probability);
 

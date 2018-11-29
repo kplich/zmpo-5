@@ -16,7 +16,7 @@ Individual::~Individual()
 }
 
 
-int Individual::evaluate_fitness()
+int Individual::evaluate_fitness(KnapsackProblem* problem_instance)
 {
 	// TODO: Add your implementation code here.
 	return 0;

@@ -21,7 +21,10 @@
     <ClInclude Include="Individual.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Knapsack.h">
+    <ClInclude Include="Algorithm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KnapsackProblem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,7 +38,10 @@
     <ClCompile Include="Individual.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Knapsack.cpp">
+    <ClCompile Include="Algorithm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KnapsackProblem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
