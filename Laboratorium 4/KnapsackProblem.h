@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
-#include "Individual.h"
 #include <map>
+#include <fstream>
 
 /**
  * Class defining the knapsack problem.
@@ -12,9 +12,21 @@
 class KnapsackProblem
 {
 public:
-	KnapsackProblem(int capacity, int number_of_items, int* item_sizes, int* item_values);
-	//TODO: file-based  constructor
+	KnapsackProblem(std::ifstream* source_file);
+	KnapsackProblem(unsigned int capacity, std::vector<std::pair<unsigned int, unsigned int>*>* items);
 	~KnapsackProblem();
+
+	unsigned int get_number_of_items();
+
+	/**
+	 * Checks for validity of instance.
+	 * \return true if the instance is valid and can be used,
+	 *		   false if an error occured while reading it from a file
+	 *		   or if there are no items declared
+	 */
+	bool is_valid();
+
+	//TODO: bool is_empty?
 
 	//TODO: translate an individual into a more readable solution
 	//std::vector<int> individual_to_solution(Individual* individual);
@@ -23,22 +35,26 @@ private:
 	/**
 	 * Maximal size of items that can be chosen.
 	 */
-	int capacity;
+	unsigned int capacity;
 
 	/**
-	 * Number of items to choose from. (size of tables below)
+	 * Validity of an instance.
 	 */
-	int number_of_items;
+	bool valid;
 
-	//TODO: consider tying these entities together as a map
-	int* item_sizes;
-	int* item_values;
-
-	//TODO: which representation to choose?
 	/**
 	 * Vector of (item_size, item_value) pairs representing items
-	 * to choose from.
+	 * to choose from. Size of this vector corresponds to the number
+	 * of items to choose from.
 	 */
-	std::vector<std::pair<int, int>> items;
+	std::vector<std::pair<unsigned int, unsigned int>*>* items;
+
+	/**
+	 * \brief Method attempting to load data for the problem from file.
+	 * \param source_file pointer to an opened stream from which the data
+	 *		  can be read. After finishing the reading the stream isn't closed.
+	 * \return true if reading is successful, false if an error occured.
+	 */
+	bool load_from_file(std::ifstream* source_file);
 };
 

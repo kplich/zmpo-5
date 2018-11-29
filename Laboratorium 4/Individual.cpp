@@ -34,6 +34,7 @@ std::vector<Individual*> Individual::crossover(Individual * other)
 Individual & Individual::operator=(const Individual & other)
 {
 	// TODO: insert return statement here
+	return *(new Individual());
 }
 
 void Individual::copy_from_another(const Individual & other)

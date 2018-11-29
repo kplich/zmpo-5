@@ -1,5 +1,6 @@
 #pragma once
 #include "KnapsackProblem.h"
+#include "Individual.h"
 
 /**
  * Class containing the logic of a genetic algorithm.

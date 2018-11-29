@@ -47,7 +47,7 @@ private:
 	/**
 	 * Table encoding a solution to the problem.
 	 */
-	bool genotype[];
+	bool* genotype;
 
 	//TODO: fun idea: how about introducing random mutations EVERYTIME an individual is copied?
 	//TODO: implement first, then implement constructors and operators
