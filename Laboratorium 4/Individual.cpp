@@ -36,6 +36,6 @@ Individual & Individual::operator=(const Individual & other)
 	// TODO: insert return statement here
 }
 
-void Individual::copy(const Individual & other)
+void Individual::copy_from_another(const Individual & other)
 {
 }
