@@ -30,28 +30,6 @@ Individual::~Individual()
 	delete[] genotype;
 }
 
-int Individual::evaluate_fitness(KnapsackProblem* problem)
-{
-	int value = 0;
-	int size = 0;
-
-	for(int i = 0; i < size; i++)
-	{
-		if(genotype[i])
-		{
-			size += problem->items->at(i)->first;
-			value += problem->items->at(i)->second;
-		}
-	}
-
-	if(size > problem->capacity)
-	{
-		value = 0;
-	}
-
-	return value;
-}
-
 void Individual::mutate(double mutation_probability)
 {
 	std::random_device device;

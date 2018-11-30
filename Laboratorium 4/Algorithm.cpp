@@ -33,7 +33,7 @@ void Algorithm::generate_population()
 		for(int i = 0; i<population_size; i++)
 		{
 			Individual* temp = new Individual(problem_instance->get_number_of_items());
-			int temp_fitness = temp->evaluate_fitness(problem_instance);
+			int temp_fitness = problem_instance->evaluate_fitness(temp);
 			population->push_back(new std::pair<Individual*, int>(temp, temp_fitness));
 		}
 	}
@@ -81,8 +81,8 @@ void Algorithm::generate_population()
 			std::pair<Individual*, Individual*> children = first_parent->crossover(second_parent, crossover_probability);
 
 			//evaluate children
-			std::pair<Individual*, int>* first_child = new std::pair<Individual*, int>(children.first, children.first->evaluate_fitness(problem_instance));
-			std::pair<Individual*, int>* second_child = new std::pair<Individual*, int>(children.second, children.second->evaluate_fitness(problem_instance));
+			std::pair<Individual*, int>* first_child = new std::pair<Individual*, int>(children.first, problem_instance->evaluate_fitness(children.first));
+			std::pair<Individual*, int>* second_child = new std::pair<Individual*, int>(children.second, problem_instance->evaluate_fitness(children.second));
 
 			new_population->push_back(first_child);
 			new_population->push_back(second_child);

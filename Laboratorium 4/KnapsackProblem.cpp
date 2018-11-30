@@ -61,6 +61,28 @@ std::string KnapsackProblem::to_string()
 	return sstream.str();
 }
 
+int KnapsackProblem::evaluate_fitness(Individual* individual)
+{
+	int value = 0;
+	int size = 0;
+
+	for (int i = 0; i < size; i++)
+	{
+		if (individual->genotype[i])
+		{
+			size += items->at(i)->first;
+			value += items->at(i)->second;
+		}
+	}
+
+	if (size > capacity)
+	{
+		value = 0;
+	}
+
+	return value;
+}
+
 bool KnapsackProblem::load_from_file(std::ifstream* source_file)
 {
 	if(!source_file->is_open())

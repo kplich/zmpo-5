@@ -4,7 +4,6 @@
 #include <fstream>
 #include "Individual.h"
 
-
 /**
  * \brief Class defining the knapsack problem.
  * 
@@ -35,8 +34,10 @@ public:
 	//TODO: translate an individual into a more readable solution
 	//std::vector<int> individual_to_solution(Individual* individual);
 
+	int evaluate_fitness(Individual* individual);
+
 	//TODO: too loose friendship, only evaluation should be a friend
-	friend int Individual::evaluate_fitness(KnapsackProblem* problem);
+	friend class Individual;
 
 private:
 	/**

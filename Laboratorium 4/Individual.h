@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include "KnapsackProblem.h"
 
 //TODO: idea for later: maybe keep fitness as a variable?
 //TODO: extract random generators
@@ -26,15 +25,6 @@ public:
 
 	Individual& operator= (const Individual& other);
 
-	//TODO: not a fan of passing these parameters explicitly
-	/**
-	 * \brief Evaluates the given individual in context of a particular
-	 *		  Knapsack problem
-	 * \param problem instance of the problem on which evaluation of an individual will be based
-	 * \return an integer representing fitness of an individual in context of a current problem.
-	 */
-	int evaluate_fitness(KnapsackProblem* problem);
-
 	/**
 	 * \brief Mutates every gene of the individual
 	 * \param mutation_probability probability (same for every gene) that it
@@ -54,6 +44,8 @@ public:
 	std::pair<Individual*, Individual*> crossover(Individual* other, double crossover_probability);
 
 	std::string to_string();
+
+	friend class KnapsackProblem;
 
 private:
 	/**
