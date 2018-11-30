@@ -27,7 +27,7 @@ private:
 	/**
 	 * Container for current population
 	 */
-	std::vector<Individual*>* population;
+	std::vector<std::pair<Individual*, int>*>* population;
 
 	/**
 	 * Pointer to an instance of a problem we attempt to solve.
@@ -54,5 +54,7 @@ private:
 	 * in a population.
 	 */
 	double crossover_probability;
+
+	void generate_population();
 };
 

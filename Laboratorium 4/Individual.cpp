@@ -30,24 +30,26 @@ Individual::~Individual()
 	delete[] genotype;
 }
 
-int Individual::evaluate_fitness(int capacity, std::vector<std::pair<int, int>*>* items)
+int Individual::evaluate_fitness(KnapsackProblem* problem)
 {
-	int result = 0;
+	int value = 0;
+	int size = 0;
 
 	for(int i = 0; i < size; i++)
 	{
 		if(genotype[i])
 		{
-			result += items->at(i)->second;
+			size += problem->items->at(i)->first;
+			value += problem->items->at(i)->second;
 		}
 	}
 
-	if(result > capacity)
+	if(size > problem->capacity)
 	{
-		result = 0;
+		value = 0;
 	}
 
-	return result;
+	return value;
 }
 
 void Individual::mutate(double mutation_probability)

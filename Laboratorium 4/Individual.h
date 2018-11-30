@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <string>
 #include "KnapsackProblem.h"
 
 //TODO: idea for later: maybe keep fitness as a variable?
@@ -30,12 +30,10 @@ public:
 	/**
 	 * \brief Evaluates the given individual in context of a particular
 	 *		  Knapsack problem
-	 * \param items vector of item sizes and values on which evaluation
-	 *		  of an individual is based
-	 * \param capacity maximum value that the fitness can have
+	 * \param problem instance of the problem on which evaluation of an individual will be based
 	 * \return an integer representing fitness of an individual in context of a current problem.
 	 */
-	int evaluate_fitness(int capacity, std::vector<std::pair<int, int>*>* items);
+	int evaluate_fitness(KnapsackProblem* problem);
 
 	/**
 	 * \brief Mutates every gene of the individual

@@ -2,16 +2,15 @@
 #include <vector>
 #include <map>
 #include <fstream>
+#include "Individual.h"
+
 
 /**
- * Class defining the knapsack problem.
+ * \brief Class defining the knapsack problem.
  * 
  * Items aren't stored in map, because ordering of items is
  * an important issue that can significantly alter the solution quality.
  */
-
-//TODO: unsigned int might not be such a good idea here! (not type safety, just overflow!)
-
 class KnapsackProblem
 {
 public:
@@ -35,6 +34,9 @@ public:
 
 	//TODO: translate an individual into a more readable solution
 	//std::vector<int> individual_to_solution(Individual* individual);
+
+	//TODO: too loose friendship, only evaluation should be a friend
+	friend int Individual::evaluate_fitness(KnapsackProblem* problem);
 
 private:
 	/**
