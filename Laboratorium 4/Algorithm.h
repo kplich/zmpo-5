@@ -25,6 +25,11 @@ public:
 
 private:
 	/**
+	 * Container for current population
+	 */
+	std::vector<Individual*>* population;
+
+	/**
 	 * Pointer to an instance of a problem we attempt to solve.
 	 */
 	KnapsackProblem* problem_instance;
