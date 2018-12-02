@@ -55,6 +55,12 @@ private:
 	 */
 	double crossover_probability;
 
+	//TODO: pass the probability as a parameter?
 	void generate_population();
+
+	//TODO: same as here?
+	void mutate_population();
+
+	std::pair<Individual*, int>* find_best_in_population();
 };
 

@@ -66,7 +66,7 @@ int KnapsackProblem::evaluate_fitness(Individual* individual)
 	int value = 0;
 	int size = 0;
 
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < this->get_number_of_items(); i++)
 	{
 		if (individual->genotype[i])
 		{

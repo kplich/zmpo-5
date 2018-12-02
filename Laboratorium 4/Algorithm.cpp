@@ -23,7 +23,18 @@ Algorithm::~Algorithm()
 
 Individual* Algorithm::solve()
 {
-	return nullptr;
+	int counter = iterations;
+	std::pair<Individual*, int>* best_in_iteration;
+
+	do
+	{
+		generate_population();
+		mutate_population();
+		best_in_iteration = find_best_in_population();
+		counter--;
+	} while (counter > 0);
+
+	return best_in_iteration->first;
 }
 
 void Algorithm::generate_population()
@@ -105,3 +116,31 @@ void Algorithm::generate_population()
 		population = new_population;
 	}
 }
+
+void Algorithm::mutate_population()
+{
+	for(int i = 0; i < population_size; i++)
+	{
+		population->at(i)->first->mutate(mutation_probability);
+	}
+}
+
+std::pair<Individual*, int>* Algorithm::find_best_in_population()
+{
+	int max_fitness = population->at(0)->second;
+	std::pair<Individual*, int>* best = population->at(0);
+
+	for(int i = 1; i < population_size; i++)
+	{
+		std::pair<Individual*, int>* temp = population->at(i);
+		if(temp->second > max_fitness)
+		{
+			best = temp;
+			max_fitness = temp->second;
+		}
+	}
+
+	return best;
+}
+
+
