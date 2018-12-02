@@ -73,14 +73,12 @@ std::string Individual::to_string()
 {
 	std::stringstream sstream;
 
-	sstream << "my genotype:\n";
-
 	for(int i = 0; i < size; i++)
 	{
 		sstream << genotype[i] << "  ";
 	}
 
-	sstream << "\n";
+	//sstream << "\n";
 
 	return sstream.str();
 }

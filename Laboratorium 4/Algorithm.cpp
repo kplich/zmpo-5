@@ -2,6 +2,7 @@
 #include "Algorithm.h"
 #include "Individual.h"
 #include <random>
+#include <iostream>
 
 Algorithm::Algorithm(KnapsackProblem* problem_instance, unsigned int iterations,
 	unsigned int population_size, double mutation_probability,
@@ -28,9 +29,21 @@ Individual* Algorithm::solve()
 
 	do
 	{
+		std::cout << "generation nr " << iterations - counter + 1 << "\n";
 		generate_population();
 		mutate_population();
+
+		for (int i = 0; i < population->size(); i++)
+		{
+			std::pair<Individual*, int>* temp = population->at(i);
+			std::cout << temp->first->to_string() << ", fitness: " << temp->second << "\n";
+		}
+
+		std::cout << "\n";
+
 		best_in_iteration = find_best_in_population();
+
+		std::cout << "best in generation, fitness: " << best_in_iteration->second << "\n\n";
 		counter--;
 	} while (counter > 0);
 
@@ -121,7 +134,9 @@ void Algorithm::mutate_population()
 {
 	for(int i = 0; i < population_size; i++)
 	{
-		population->at(i)->first->mutate(mutation_probability);
+		std::pair<Individual*, int>* temp = population->at(i);
+		temp->first->mutate(mutation_probability);
+		temp->second = problem_instance->evaluate_fitness(temp->first);
 	}
 }
 
