@@ -27,7 +27,7 @@ private:
 	/**
 	 * Container for current population
 	 */
-	std::vector<std::pair<Individual*, int>*>* population;
+	std::vector<Individual*>* population;
 
 	/**
 	 * Pointer to an instance of a problem we attempt to solve.
@@ -61,6 +61,6 @@ private:
 	//TODO: same as here?
 	void mutate_population();
 
-	std::pair<Individual*, int>* find_best_in_population();
+	Individual* find_best_in_population();
 };
 

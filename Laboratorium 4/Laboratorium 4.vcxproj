@@ -152,12 +152,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Algorithm.h" />
+    <ClInclude Include="evaluation.h" />
     <ClInclude Include="Individual.h" />
     <ClInclude Include="KnapsackProblem.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Algorithm.cpp" />
+    <ClCompile Include="evaluation.cpp" />
     <ClCompile Include="Individual.cpp" />
     <ClCompile Include="KnapsackProblem.cpp" />
     <ClCompile Include="Laboratorium 4.cpp" />

@@ -4,6 +4,10 @@
 //TODO: idea for later: maybe keep fitness as a variable?
 //TODO: extract random generators
 
+//forward declaration - to resolve a cyclic dependency between
+//Individual class and KnapsackProblem class
+class KnapsackProblem;
+
 /**
  * \brief Class encoding a possible solution to a problem. Equipped with
  *        methods allowing mutation and crossing with other individuals.
@@ -17,7 +21,7 @@ public:
 	 * a randomly initialized genotype.
 	 * \param size length of the table encoding the solution (genotype)
 	 */
-	explicit Individual(int size);
+	explicit Individual(int size, KnapsackProblem* problem_instance);
 
 	Individual(Individual& other);
 
@@ -33,7 +37,6 @@ public:
 	void mutate(double mutation_probability);
 
 	//TODO: implement an operator for that!
-	//TODO: make it return a pointer to pair?
 	/**
 	 * \brief Performs a crossover with another individual.
 	 * \param other Pointer to the other individual in the crossover
@@ -45,9 +48,13 @@ public:
 
 	std::string to_string();
 
-	friend class KnapsackProblem;
+	int get_fitness();
+
+	friend int evaluate_fitness(Individual* individual, KnapsackProblem* problem_instance);
 
 private:
+	KnapsackProblem* problem_instance;
+
 	/**
 	 * Table encoding a solution to the problem.
 	 */
@@ -57,6 +64,11 @@ private:
 	 * Length of the table encoding the solution.
 	 */
 	int size;
+
+	/**
+	 * Fitness of the given individual.
+	 */
+	int fitness;
 
 	//TODO: fun idea: how about introducing random mutations EVERYTIME an individual is copied?
 	//TODO: implement first, then implement constructors and operators

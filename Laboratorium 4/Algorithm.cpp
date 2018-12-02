@@ -15,7 +15,7 @@ Algorithm::Algorithm(KnapsackProblem* problem_instance, unsigned int iterations,
 	this->mutation_probability = mutation_probability;
 	this->crossover_probability = crossover_possibility;
 
-	this->population = new std::vector<std::pair<Individual*, int>*>();
+	this->population = new std::vector<Individual*>();
 }
 
 Algorithm::~Algorithm()
@@ -25,7 +25,7 @@ Algorithm::~Algorithm()
 Individual* Algorithm::solve()
 {
 	int counter = iterations;
-	std::pair<Individual*, int>* best_in_iteration;
+	Individual* best_in_iteration;
 
 	do
 	{
@@ -35,19 +35,19 @@ Individual* Algorithm::solve()
 
 		for (int i = 0; i < population->size(); i++)
 		{
-			std::pair<Individual*, int>* temp = population->at(i);
-			std::cout << temp->first->to_string() << ", fitness: " << temp->second << "\n";
+			Individual* temp = population->at(i);
+			std::cout << temp->to_string();
 		}
 
 		std::cout << "\n";
 
 		best_in_iteration = find_best_in_population();
 
-		std::cout << "best in generation, fitness: " << best_in_iteration->second << "\n\n";
+		std::cout << "best in generation, fitness: " << best_in_iteration->get_fitness() << "\n\n";
 		counter--;
 	} while (counter > 0);
 
-	return best_in_iteration->first;
+	return best_in_iteration;
 }
 
 void Algorithm::generate_population()
@@ -56,15 +56,14 @@ void Algorithm::generate_population()
 	{
 		for(int i = 0; i<population_size; i++)
 		{
-			Individual* temp = new Individual(problem_instance->get_number_of_items());
-			int temp_fitness = problem_instance->evaluate_fitness(temp);
-			population->push_back(new std::pair<Individual*, int>(temp, temp_fitness));
+			Individual* temp = new Individual(problem_instance->get_number_of_items(), problem_instance);
+			population->push_back(temp);
 		}
 	}
 	else
 	{
 		//set up a new vector
-		std::vector<std::pair<Individual*, int>*>* new_population = new std::vector<std::pair<Individual*, int>*>();
+		std::vector<Individual*>* new_population = new std::vector<Individual*>();
 
 		//set up RNG
 		std::random_device device;
@@ -75,38 +74,38 @@ void Algorithm::generate_population()
 		while (new_population->size() < population_size)
 		{
 			//get four random individuals
-			std::pair<Individual*, int>* first = population->at(distribution(generator));
-			std::pair<Individual*, int>* second = population->at(distribution(generator));
-			std::pair<Individual*, int>* third = population->at(distribution(generator));
-			std::pair<Individual*, int>* fourth = population->at(distribution(generator));
+			Individual* first = population->at(distribution(generator));
+			Individual*second = population->at(distribution(generator));
+			Individual*third = population->at(distribution(generator));
+			Individual*fourth = population->at(distribution(generator));
 
 			//assign them to roles of first parent and second parent
 			Individual* first_parent;
 			Individual* second_parent;
-			if(first->second >= second->second)
+			if(first->get_fitness() >= second->get_fitness())
 			{
-				first_parent = first->first;
+				first_parent = first;
 			}
 			else
 			{
-				first_parent = second->first;
+				first_parent = second;
 			}
 
-			if(third->second >= fourth->second)
+			if(third->get_fitness() >= fourth->get_fitness())
 			{
-				second_parent = third->first;
+				second_parent = third;
 			}
 			else
 			{
-				second_parent = fourth->first;
+				second_parent = fourth;
 			}
 
 			//cross individuals over and get their children
 			std::pair<Individual*, Individual*> children = first_parent->crossover(second_parent, crossover_probability);
 
 			//evaluate children
-			std::pair<Individual*, int>* first_child = new std::pair<Individual*, int>(children.first, problem_instance->evaluate_fitness(children.first));
-			std::pair<Individual*, int>* second_child = new std::pair<Individual*, int>(children.second, problem_instance->evaluate_fitness(children.second));
+			Individual* first_child = children.first;
+			Individual* second_child = children.second;
 
 			new_population->push_back(first_child);
 			new_population->push_back(second_child);
@@ -116,9 +115,6 @@ void Algorithm::generate_population()
 		for(int i = 0; i < population->size(); i++)
 		{
 			//delete the individual
-			delete population->at(i)->first;
-
-			//delete its pair
 			delete population->at(i);
 		}
 
@@ -134,24 +130,23 @@ void Algorithm::mutate_population()
 {
 	for(int i = 0; i < population_size; i++)
 	{
-		std::pair<Individual*, int>* temp = population->at(i);
-		temp->first->mutate(mutation_probability);
-		temp->second = problem_instance->evaluate_fitness(temp->first);
+		Individual* temp = population->at(i);
+		temp->mutate(mutation_probability);
 	}
 }
 
-std::pair<Individual*, int>* Algorithm::find_best_in_population()
+Individual* Algorithm::find_best_in_population()
 {
-	int max_fitness = population->at(0)->second;
-	std::pair<Individual*, int>* best = population->at(0);
+	Individual* best = population->at(0);
+	int max_fitness = population->at(0)->get_fitness();
 
 	for(int i = 1; i < population_size; i++)
 	{
-		std::pair<Individual*, int>* temp = population->at(i);
-		if(temp->second > max_fitness)
+		Individual* temp = population->at(i);
+		if(temp->get_fitness() > max_fitness)
 		{
 			best = temp;
-			max_fitness = temp->second;
+			max_fitness = temp->get_fitness();
 		}
 	}
 

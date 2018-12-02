@@ -4,8 +4,9 @@
 #include <sstream>
 
 
-Individual::Individual(int size)
+Individual::Individual(int size, KnapsackProblem* problem_instance)
 {
+	this->problem_instance = problem_instance;
 	this->size = size;
 
 	std::random_device device;
@@ -18,6 +19,8 @@ Individual::Individual(int size)
 	{
 		genotype[i] = distribution(generator);
 	}
+
+	this->fitness = evaluate_fitness(this, problem_instance);
 }
 
 Individual::Individual(Individual& other)
@@ -42,6 +45,8 @@ void Individual::mutate(double mutation_probability)
 			genotype[i] = !genotype[i];
 		}
 	}
+
+	this->fitness = evaluate_fitness(this, problem_instance);
 }
 
 std::pair<Individual*, Individual*> Individual::crossover(Individual* other, double crossover_probability)
@@ -65,6 +70,10 @@ std::pair<Individual*, Individual*> Individual::crossover(Individual* other, dou
 			second->genotype[i] = temp;
 		}
 	}
+
+	first->fitness = evaluate_fitness(first, problem_instance);
+	second->fitness = evaluate_fitness(second, problem_instance);
+
 	std::pair<Individual*, Individual*>	result(first, second);
 	return result;
 }
@@ -78,9 +87,14 @@ std::string Individual::to_string()
 		sstream << genotype[i] << "  ";
 	}
 
-	//sstream << "\n";
+	sstream << ", fitness: " << fitness << "\n";
 
 	return sstream.str();
+}
+
+int Individual::get_fitness()
+{
+	return fitness;
 }
 
 Individual& Individual::operator=(const Individual& other)
@@ -95,7 +109,9 @@ void Individual::copy_from_another(const Individual& other)
 	delete[] this->genotype;
 
 	//make room for new data
+	this->problem_instance = other.problem_instance;
 	this->size = other.size;
+	this->fitness = other.fitness;
 	this->genotype = new bool[size];
 
 	//copy data
