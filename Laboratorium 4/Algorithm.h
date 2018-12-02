@@ -8,10 +8,9 @@
 class Algorithm
 {
 public:
-	//TODO: allow for default values of these parameters
-	Algorithm(KnapsackProblem* problem_instance, unsigned int iterations,
-		unsigned int population_size, double mutation_probability,
-		double crossover_possibility);
+	Algorithm(KnapsackProblem* problem_instance, unsigned int iterations = 20,
+		unsigned int population_size = 100, double mutation_probability = 0.03,
+		double crossover_possibility = 0.6);
 	~Algorithm();
 
 	/**

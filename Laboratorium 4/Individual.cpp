@@ -119,4 +119,8 @@ void Individual::copy_from_another(const Individual& other)
 	{
 		genotype[i] = other.genotype[i];
 	}
+
+	//a little quirk - copying will introduce mutations
+	//with a very small probability
+	this->mutate(0.00001);
 }

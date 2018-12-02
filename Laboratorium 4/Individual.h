@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 
-//TODO: idea for later: maybe keep fitness as a variable?
 //TODO: extract random generators
 
 //forward declaration - to resolve a cyclic dependency between
@@ -70,8 +69,6 @@ private:
 	 */
 	int fitness;
 
-	//TODO: fun idea: how about introducing random mutations EVERYTIME an individual is copied?
-	//TODO: implement first, then implement constructors and operators
 	void copy_from_another(const Individual& other);
 };
 
