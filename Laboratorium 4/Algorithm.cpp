@@ -20,12 +20,13 @@ Algorithm::Algorithm(KnapsackProblem* problem_instance, unsigned int iterations,
 
 Algorithm::~Algorithm()
 {
+	//TODO: why isn't this done?
 }
 
 Individual* Algorithm::solve()
 {
 	int counter = iterations;
-	Individual* best_in_iteration;
+	Individual* best_ever = nullptr;
 
 	do
 	{
@@ -41,13 +42,27 @@ Individual* Algorithm::solve()
 
 		std::cout << "\n";
 
-		best_in_iteration = find_best_in_population();
+		
+		Individual* best_in_iteration = find_best_in_population();
+		if (counter != iterations) {
+			if (best_in_iteration->get_fitness() > best_ever->get_fitness())
+			{
+				//old best_ever is copied, because it's no longer necessary
+				delete best_ever;
+				//new best_ever is copied, because it has to outlive its generation
+				best_ever = new Individual(*best_in_iteration);
+			}
+		}
+		else
+		{
+			best_ever = new Individual(*best_in_iteration);
+		}
 
 		std::cout << "best in generation, fitness: " << best_in_iteration->get_fitness() << "\n\n";
 		counter--;
 	} while (counter > 0);
 
-	return best_in_iteration;
+	return best_ever;
 }
 
 void Algorithm::generate_population()
