@@ -20,7 +20,7 @@ Algorithm::Algorithm(KnapsackProblem* problem_instance, unsigned int iterations,
 
 Algorithm::~Algorithm()
 {
-	//TODO: why isn't this done?
+	delete population;
 }
 
 Individual* Algorithm::solve()
@@ -28,39 +28,41 @@ Individual* Algorithm::solve()
 	int counter = iterations;
 	Individual* best_ever = nullptr;
 
-	do
-	{
-		std::cout << "generation nr " << iterations - counter + 1 << "\n";
-		generate_population();
-		mutate_population();
-
-		for (int i = 0; i < population->size(); i++)
+	if (problem_instance->is_valid()) {
+		do
 		{
-			Individual* temp = population->at(i);
-			std::cout << temp->to_string();
-		}
+			std::cout << "generation nr " << iterations - counter + 1 << "\n";
 
-		std::cout << "\n";
+			generate_population();
+			mutate_population();
 
-		
-		Individual* best_in_iteration = find_best_in_population();
-		if (counter != iterations) {
-			if (best_in_iteration->get_fitness() > best_ever->get_fitness())
+			print_population();
+
+			Individual* best_in_iteration = find_best_in_iteration();
+			if (counter != iterations) {
+				if (best_in_iteration->get_fitness() > best_ever->get_fitness())
+				{
+					//old best_ever is copied, because it's no longer necessary
+					delete best_ever;
+					//new best_ever is copied, because it has to outlive its generation
+					best_ever = new Individual(*best_in_iteration);
+				}
+			}
+			else
 			{
-				//old best_ever is copied, because it's no longer necessary
-				delete best_ever;
-				//new best_ever is copied, because it has to outlive its generation
 				best_ever = new Individual(*best_in_iteration);
 			}
-		}
-		else
-		{
-			best_ever = new Individual(*best_in_iteration);
-		}
 
-		std::cout << "best in generation, fitness: " << best_in_iteration->get_fitness() << "\n\n";
-		counter--;
-	} while (counter > 0);
+			std::cout << "best in generation, fitness: " << best_in_iteration->get_fitness() << "\n\n";
+			counter--;
+		} while (counter > 0);
+
+		kill_population();
+	}
+	else
+	{
+		//TODO: invalid problem instance
+	}
 
 	return best_ever;
 }
@@ -126,12 +128,7 @@ void Algorithm::generate_population()
 			new_population->push_back(second_child);
 		}
 
-		//deallocate old population
-		for(int i = 0; i < population->size(); i++)
-		{
-			//delete the individual
-			delete population->at(i);
-		}
+		kill_population();
 
 		//deallocate the containter
 		delete population;
@@ -150,7 +147,27 @@ void Algorithm::mutate_population()
 	}
 }
 
-Individual* Algorithm::find_best_in_population()
+void Algorithm::print_population()
+{
+	for (int i = 0; i < population->size(); i++)
+	{
+		Individual* temp = population->at(i);
+		std::cout << temp->to_string();
+	}
+
+	std::cout << "\n";
+}
+
+void Algorithm::kill_population()
+{
+	for (int i = 0; i < population->size(); i++)
+	{
+		delete population->at(i);
+	}
+
+}
+
+Individual* Algorithm::find_best_in_iteration()
 {
 	Individual* best = population->at(0);
 	int max_fitness = population->at(0)->get_fitness();

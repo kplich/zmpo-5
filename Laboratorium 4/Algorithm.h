@@ -60,6 +60,10 @@ private:
 	//TODO: same as here?
 	void mutate_population();
 
-	Individual* find_best_in_population();
+	void print_population();
+
+	void kill_population();
+
+	Individual* find_best_in_iteration();
 };
 

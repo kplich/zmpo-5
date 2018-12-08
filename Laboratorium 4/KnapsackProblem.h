@@ -61,5 +61,7 @@ private:
 	 * \return true if reading is successful, false if an error occured.
 	 */
 	bool load_from_file(std::ifstream* source_file);
+
+	std::pair<int, int>* get_size_value_pair(std::string line, int line_number);
 };
 

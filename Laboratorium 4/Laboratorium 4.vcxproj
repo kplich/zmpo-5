@@ -156,6 +156,7 @@
     <ClInclude Include="Individual.h" />
     <ClInclude Include="KnapsackProblem.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="print_error.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Algorithm.cpp" />
@@ -169,6 +170,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="print_error.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

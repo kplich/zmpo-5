@@ -2,7 +2,13 @@
 #include "KnapsackProblem.h"
 #include <string>
 #include <sstream>
+#include "print_error.h"
 
+const std::string FILE_NOT_OPENED_ERROR = "Couldn't open the file.";
+const std::string UNKNOWN_IO_ERROR = "Unknown input/output error.";
+const std::string INVALID_CAPACITY_ERROR = "Invalid capacity of the knapsack.";
+const std::string INVALID_ITEM_SIZE_ERROR = "Invalid size of an item.";
+const std::string INVALID_ITEM_VALUE_ERROR = "Invalid value of an item.";
 
 KnapsackProblem::KnapsackProblem(int capacity, std::vector<std::pair<int, int>*>* items)
 {
@@ -63,43 +69,57 @@ std::string KnapsackProblem::to_string()
 
 bool KnapsackProblem::load_from_file(std::ifstream* source_file)
 {
+	//we assume that loading will not succeed
+	this->valid = false;
+
+	//file might not be open
 	if(!source_file->is_open())
 	{
-		//TODO: file not opened error
+		print_error(FILE_NOT_OPENED_ERROR);
 		return false;
 	}
+
+	int line_number = 1;
 
 	//parse capacity
-	std::string first_line;
-	std::getline(*source_file, first_line);
+	std::string temp_line;
+	std::getline(*source_file, temp_line);
 
-	if(!source_file->good())
+	//TODO: more numbers might be declared here
+	int capacity = std::stoi(temp_line);
+
+	if (capacity <= 0)
 	{
-		//TODO: input output error
+		print_error(INVALID_CAPACITY_ERROR, line_number);
 		return false;
 	}
 
-	//TODO: more numbers might be declared here
-	int capacity = std::stoi(first_line);
+	line_number++;
+
+	//file might have been corrupted?
+	if(!source_file->good())
+	{
+		print_error(UNKNOWN_IO_ERROR, line_number);
+		return false;
+	}
 
 	//parse sizes and values
 	std::vector<std::pair<int, int>*>* result = new std::vector<std::pair<int, int>*>();
 
-	int temp_size;
-	int temp_value;
-	do
+	while (std::getline(*source_file, temp_line))
 	{
-		//TODO: maybe better to read this line by line?
-		//TODO: also check for negative values!
-		//TODO: sensitive to newlines at the end of the file!
-		*source_file >> temp_size >> temp_value;
-		std::pair<int, int>* next_pair = new std::pair<int, int>(temp_size, temp_value);
-		result->push_back(next_pair);
-	} while (source_file->good()); //TODO: is that a proper way to loop a stream?
+		std::pair<int, int>* next_pair = get_size_value_pair(temp_line, line_number);;
+
+		if (next_pair != nullptr) {
+			result->push_back(next_pair);
+		}
+
+		line_number++;
+	}
 
 	if(!source_file->eof())
 	{
-		//TODO: input output error
+		print_error(UNKNOWN_IO_ERROR);
 		//unknown input output error, discard everything we read
 		for(int i = 0; i<result->size(); i++)
 		{
@@ -117,4 +137,30 @@ bool KnapsackProblem::load_from_file(std::ifstream* source_file)
 	this->valid = true;
 
 	return true;
+}
+
+std::pair<int, int>* KnapsackProblem::get_size_value_pair(std::string line, int line_number)
+{
+	int size;
+	int value;
+
+	std::stringstream stream(line);
+
+	//TODO: what about this place?
+	stream >> size;
+	stream >> value;
+
+	if (size <= 0)
+	{
+		print_error(INVALID_ITEM_SIZE_ERROR, line_number);
+		return nullptr;
+	}
+
+	if (value <= 0)
+	{
+		print_error(INVALID_ITEM_VALUE_ERROR, line_number);
+		return nullptr;
+	}
+
+	return new std::pair<int, int>(size, value);
 }
