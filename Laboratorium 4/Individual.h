@@ -1,8 +1,6 @@
 #pragma once
 #include <string>
 
-//TODO: extract random generators
-
 //forward declaration - to resolve a cyclic dependency between
 //Individual class and KnapsackProblem class
 class KnapsackProblem;

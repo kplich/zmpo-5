@@ -16,8 +16,6 @@ Algorithm::Algorithm(KnapsackProblem* problem_instance, int iterations,
 	int population_size, double mutation_probability,
 	double crossover_probability)
 {
-	//TODO: check for invalid values
-
 	if(!problem_instance->is_valid() || problem_instance == nullptr)
 	{
 		print_error(INVALID_PROBLEM_INSTANCE);

@@ -24,6 +24,10 @@ public:
 
 private:
 
+	/**
+	 * Stores state of the algorithm instance. If wrong parameters were passed,
+	 * the instance won't be valid and won't be run.
+	 */
 	bool valid;
 
 	/**
@@ -57,10 +61,8 @@ private:
 	 */
 	double crossover_probability;
 
-	//TODO: pass the probability as a parameter?
 	void generate_population();
 
-	//TODO: same as here?
 	void mutate_population();
 
 	void print_population();
