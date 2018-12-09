@@ -12,8 +12,8 @@ const std::string INVALID_POPULATION_SIZE = "Invalid population size passed.";
 const std::string INVALID_MUTATION_PROBABILITY = "Mutation probability out of range.";
 const std::string INVALID_CROSSOVER_PROBABILITY = "Crossover probability out of range.";
 
-Algorithm::Algorithm(KnapsackProblem* problem_instance, unsigned int iterations,
-	unsigned int population_size, double mutation_probability,
+Algorithm::Algorithm(KnapsackProblem* problem_instance, int iterations,
+	int population_size, double mutation_probability,
 	double crossover_probability)
 {
 	//TODO: check for invalid values

@@ -8,8 +8,8 @@
 class Algorithm
 {
 public:
-	Algorithm(KnapsackProblem* problem_instance, unsigned int iterations = 20,
-		unsigned int population_size = 100, double mutation_probability = 0.03,
+	Algorithm(KnapsackProblem* problem_instance, int iterations = 20,
+		int population_size = 100, double mutation_probability = 0.03,
 		double crossover_probability = 0.6);
 	~Algorithm();
 
@@ -39,12 +39,12 @@ private:
 	/**
 	 * Number of iterations that the algorithm will perform
 	 */
-	unsigned int iterations;
+	int iterations;
 
 	/**
 	 * Number of individuals generated in each iteration.
 	 */
-	unsigned int population_size;
+	int population_size;
 
 	/**
 	 * Probability of random mutations of genotype.
