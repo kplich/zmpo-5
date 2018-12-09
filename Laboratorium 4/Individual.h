@@ -35,7 +35,6 @@ public:
 	 */
 	void mutate(double mutation_probability);
 
-	//TODO: implement an operator for that!
 	/**
 	 * \brief Performs a crossover with another individual.
 	 * \param other Pointer to the other individual in the crossover

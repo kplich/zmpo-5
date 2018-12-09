@@ -29,11 +29,6 @@ public:
 
 	std::string to_string();
 
-	//TODO: bool is_empty?
-
-	//TODO: translate an individual into a more readable solution
-	//std::vector<int> individual_to_solution(Individual* individual);
-
 	friend int evaluate_fitness(Individual* individual, KnapsackProblem* problem);
 
 private:

@@ -141,12 +141,11 @@ bool KnapsackProblem::load_from_file(std::ifstream* source_file)
 
 std::pair<int, int>* KnapsackProblem::get_size_value_pair(std::string line, int line_number)
 {
-	int size;
-	int value;
+	int size = -1;
+	int value = -1;
 
 	std::stringstream stream(line);
 
-	//TODO: what about this place?
 	stream >> size;
 	stream >> value;
 

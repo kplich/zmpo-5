@@ -10,7 +10,7 @@ class Algorithm
 public:
 	Algorithm(KnapsackProblem* problem_instance, unsigned int iterations = 20,
 		unsigned int population_size = 100, double mutation_probability = 0.03,
-		double crossover_possibility = 0.6);
+		double crossover_probability = 0.6);
 	~Algorithm();
 
 	/**
@@ -23,6 +23,9 @@ public:
 	Individual* solve();
 
 private:
+
+	bool valid;
+
 	/**
 	 * Container for current population
 	 */
