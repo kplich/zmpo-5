@@ -53,6 +53,8 @@ Algorithm::Algorithm(KnapsackProblem* problem_instance, int iterations,
 	this->crossover_probability = crossover_probability;
 
 	this->population = new std::vector<Individual*>();
+
+	this->valid = true;
 }
 
 Algorithm::~Algorithm()

@@ -2,7 +2,6 @@
 #include <vector>
 #include <map>
 #include <fstream>
-#include "Individual.h"
 
 /**
  * \brief Class defining the knapsack problem.
@@ -29,7 +28,7 @@ public:
 
 	std::string to_string();
 
-	friend int evaluate_fitness(Individual* individual, KnapsackProblem* problem);
+	int evaluate_fitness(bool* genotype);
 
 private:
 	/**

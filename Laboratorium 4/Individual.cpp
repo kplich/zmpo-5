@@ -20,7 +20,7 @@ Individual::Individual(int size, KnapsackProblem* problem_instance)
 		genotype[i] = distribution(generator);
 	}
 
-	this->fitness = evaluate_fitness(this, problem_instance);
+	this->fitness = problem_instance->evaluate_fitness(genotype);
 }
 
 Individual::Individual(Individual& other)
@@ -46,7 +46,7 @@ void Individual::mutate(double mutation_probability)
 		}
 	}
 
-	this->fitness = evaluate_fitness(this, problem_instance);
+	this->fitness = problem_instance->evaluate_fitness(genotype);
 }
 
 std::pair<Individual*, Individual*> Individual::crossover(Individual* other, double crossover_probability)
@@ -71,8 +71,8 @@ std::pair<Individual*, Individual*> Individual::crossover(Individual* other, dou
 		}
 	}
 
-	first->fitness = evaluate_fitness(first, problem_instance);
-	second->fitness = evaluate_fitness(second, problem_instance);
+	first->fitness = problem_instance->evaluate_fitness(genotype);
+	second->fitness = problem_instance->evaluate_fitness(genotype);
 
 	std::pair<Individual*, Individual*>	result(first, second);
 	return result;

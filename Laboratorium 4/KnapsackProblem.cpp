@@ -67,6 +67,28 @@ std::string KnapsackProblem::to_string()
 	return sstream.str();
 }
 
+int KnapsackProblem::evaluate_fitness(bool* genotype)
+{
+	int value = 0;
+	int size = 0;
+
+	for (int i = 0; i < get_number_of_items(); i++)
+	{
+		if (genotype[i])
+		{
+			size += items->at(i)->first;
+			value += items->at(i)->second;
+		}
+	}
+
+	if (size > capacity)
+	{
+		value = 0;
+	}
+
+	return value;
+}
+
 bool KnapsackProblem::load_from_file(std::ifstream* source_file)
 {
 	//we assume that loading will not succeed

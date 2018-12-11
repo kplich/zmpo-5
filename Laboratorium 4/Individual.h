@@ -1,9 +1,9 @@
 #pragma once
 #include <string>
+#include "KnapsackProblem.h":
 
 //forward declaration - to resolve a cyclic dependency between
 //Individual class and KnapsackProblem class
-class KnapsackProblem;
 
 /**
  * \brief Class encoding a possible solution to a problem. Equipped with
@@ -45,8 +45,6 @@ public:
 	std::string to_string();
 
 	int get_fitness();
-
-	friend int evaluate_fitness(Individual* individual, KnapsackProblem* problem_instance);
 
 private:
 	KnapsackProblem* problem_instance;
