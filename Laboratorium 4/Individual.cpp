@@ -103,6 +103,32 @@ Individual& Individual::operator=(const Individual& other)
 	return *this;
 }
 
+Individual& Individual::operator+(const Individual& other)
+{
+	std::random_device device;
+	std::mt19937 generator(device());
+	std::uniform_int_distribution<> distribution(1, size - 1);
+
+	Individual* child = new Individual(*this);
+
+	int cutting_point = distribution(generator);
+
+	//swap genes for each gene, from the cutting point to the end
+	for (int i = cutting_point; i < size; i++)
+	{
+		child->genotype[i] = other.genotype[i];
+	}
+
+	child->fitness = problem_instance->evaluate_fitness(this->genotype);
+
+	return *child;
+}
+
+void Individual::operator++()
+{
+	this->mutate(0.5);
+}
+
 void Individual::copy_from_another(const Individual& other)
 {
 	//clean up old data

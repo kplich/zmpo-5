@@ -26,6 +26,10 @@ public:
 
 	Individual& operator= (const Individual& other);
 
+	Individual& operator+ (const Individual& other);
+
+	void operator++();
+
 	/**
 	 * \brief Mutates every gene of the individual
 	 * \param mutation_probability probability (same for every gene) that it
