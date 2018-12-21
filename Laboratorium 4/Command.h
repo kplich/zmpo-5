@@ -2,9 +2,6 @@
 #include "AbstractMenuItem.h"
 #include "AbstractAction.h"
 
-class Menu;
-class ParsingStack;
-
 class Command : public AbstractMenuItem
 {
 public:

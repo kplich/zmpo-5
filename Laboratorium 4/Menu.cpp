@@ -7,6 +7,7 @@
 #include "Parser.h"
 #include "special_actions.h"
 #include <sstream>
+#include "Parser.h"
 
 static const std::string available_items = "Available options:";
 static const std::string no_item_found = "No option with given command found.";

@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "KnapsackProblem.h":
+#include "KnapsackProblem.h"
 
 //forward declaration - to resolve a cyclic dependency between
 //Individual class and KnapsackProblem class
