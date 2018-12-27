@@ -10,7 +10,7 @@ class Algorithm
 public:
 	Algorithm(KnapsackProblem* problem_instance, int iterations = 20,
 		int population_size = 100, double mutation_probability = 0.03,
-		double crossover_probability = 0.6);
+		double crossover_probability = 0.6, int execution_time = 60);
 	~Algorithm();
 
 	/**
@@ -40,6 +40,7 @@ private:
 	 */
 	KnapsackProblem* problem_instance;
 
+	//TODO: currently unused!
 	/**
 	 * Number of iterations that the algorithm will perform
 	 */
@@ -60,6 +61,9 @@ private:
 	 * in a population.
 	 */
 	double crossover_probability;
+
+	//TODO: two competing criteria: execution time and number of iterations
+	int execution_time;
 
 	void generate_population();
 

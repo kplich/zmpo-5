@@ -4,6 +4,7 @@
 #include <random>
 #include <iostream>
 #include "print_error.h"
+#include <chrono>
 
 const std::string INVALID_ALGORITHM_INSTANCE = "Can't run the algorithm.\nInvalid algorithm instance.";
 const std::string INVALID_PROBLEM_INSTANCE = "Invalid problem instance used.";
@@ -11,10 +12,11 @@ const std::string INVALID_ITERATIONS_COUNT = "Invalid number of iterations passe
 const std::string INVALID_POPULATION_SIZE = "Invalid population size passed.";
 const std::string INVALID_MUTATION_PROBABILITY = "Mutation probability out of range.";
 const std::string INVALID_CROSSOVER_PROBABILITY = "Crossover probability out of range.";
+const std::string INVALID_EXECUTION_TIME = "Invalid execution time.";
 
 Algorithm::Algorithm(KnapsackProblem* problem_instance, int iterations,
 	int population_size, double mutation_probability,
-	double crossover_probability)
+	double crossover_probability, int execution_time)
 {
 	if(!problem_instance->is_valid() || problem_instance == nullptr)
 	{
@@ -46,11 +48,18 @@ Algorithm::Algorithm(KnapsackProblem* problem_instance, int iterations,
 		this->valid = false;
 	}
 
+	if (execution_time <= 0)
+	{
+		print_error(INVALID_EXECUTION_TIME);
+		this->valid = false;
+	}
+
 	this->problem_instance = problem_instance;
 	this->iterations = iterations;
 	this->population_size = population_size;
 	this->mutation_probability = mutation_probability;
 	this->crossover_probability = crossover_probability;
+	this->execution_time = execution_time;
 
 	this->population = new std::vector<Individual*>();
 
@@ -64,6 +73,8 @@ Algorithm::~Algorithm()
 
 Individual* Algorithm::solve()
 {
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+	std::chrono::steady_clock::time_point after_iteration;
 	int counter = iterations;
 	Individual* best_ever = nullptr;
 
