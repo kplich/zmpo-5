@@ -194,3 +194,7 @@ std::pair<int, int>* KnapsackProblem<T>::get_size_value_pair(std::string line, i
 
 	return new std::pair<int, int>(size, value);
 }
+
+template class KnapsackProblem<bool>;
+template class KnapsackProblem<int>;
+template class KnapsackProblem<double>;

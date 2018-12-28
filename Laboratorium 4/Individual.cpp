@@ -259,7 +259,7 @@ void Individual<T>::copy_from_another(const Individual<T>& other)
 	this->problem_instance = other.problem_instance;
 	this->size = other.size;
 	this->fitness = other.fitness;
-	this->genotype = new bool[size];
+	this->genotype = new T[size];
 
 	//copy data
 	for(int i = 0; i < size; i++)
@@ -267,3 +267,7 @@ void Individual<T>::copy_from_another(const Individual<T>& other)
 		genotype[i] = other.genotype[i];
 	}
 }
+
+template class Individual<bool>;
+template class Individual<int>;
+template class Individual<double>;

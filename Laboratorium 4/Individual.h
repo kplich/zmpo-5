@@ -71,4 +71,3 @@ private:
 
 	void copy_from_another(const Individual& other);
 };
-

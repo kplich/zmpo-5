@@ -242,4 +242,6 @@ Individual<T>* Algorithm<T>::find_best_in_iteration()
 	return best;
 }
 
-
+template class Algorithm<bool>;
+template class Algorithm<int>;
+template class Algorithm<double>;

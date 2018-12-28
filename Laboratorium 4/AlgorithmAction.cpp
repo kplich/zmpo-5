@@ -22,5 +22,7 @@ void AlgorithmAction<T>::perform_action(Individual<T>* result) const
 	result = algorithm_instance->solve();
 }
 
-
+template class AlgorithmAction<bool>;
+template class AlgorithmAction<int>;
+template class AlgorithmAction<double>;
 
