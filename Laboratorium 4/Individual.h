@@ -19,7 +19,7 @@ public:
 	 * a randomly initialized genotype.
 	 * \param size length of the table encoding the solution (genotype)
 	 */
-	explicit Individual(int size, KnapsackProblem* problem_instance);
+	explicit Individual(int size, KnapsackProblem<T>* problem_instance);
 
 	Individual(Individual<T>& other);
 
@@ -52,7 +52,7 @@ public:
 	int get_fitness();
 
 private:
-	KnapsackProblem* problem_instance;
+	KnapsackProblem<T>* problem_instance;
 
 	/**
 	 * Table encoding a solution to the problem.

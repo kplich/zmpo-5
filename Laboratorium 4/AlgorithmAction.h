@@ -2,14 +2,15 @@
 #include "AbstractAction.h"
 #include "Algorithm.h"
 
+template<class T>
 class AlgorithmAction : public AbstractAction
 {
 public:
-	AlgorithmAction(Algorithm* algorithm_instance);
+	AlgorithmAction(Algorithm<T>* algorithm_instance);
 
 	void perform_action() const override;
 
-	void perform_action(Individual* result) const;
+	void perform_action(Individual<T>* result) const;
 private:
-	Algorithm* algorithm_instance;
+	Algorithm<T>* algorithm_instance;
 };

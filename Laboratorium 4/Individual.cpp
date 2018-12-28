@@ -4,7 +4,7 @@
 #include <sstream>
 
 template<>
-Individual<bool>::Individual(int size, KnapsackProblem* problem_instance)
+Individual<bool>::Individual(int size, KnapsackProblem<bool>* problem_instance)
 {
 	this->problem_instance = problem_instance;
 	this->size = size;
@@ -24,7 +24,7 @@ Individual<bool>::Individual(int size, KnapsackProblem* problem_instance)
 }
 
 template <>
-Individual<int>::Individual(int size, KnapsackProblem* problem_instance)
+Individual<int>::Individual(int size, KnapsackProblem<int>* problem_instance)
 {
 	this->problem_instance = problem_instance;
 	this->size = size;
@@ -44,7 +44,7 @@ Individual<int>::Individual(int size, KnapsackProblem* problem_instance)
 }
 
 template <>
-Individual<double>::Individual(int size, KnapsackProblem* problem_instance)
+Individual<double>::Individual(int size, KnapsackProblem<double>* problem_instance)
 {
 	this->problem_instance = problem_instance;
 	this->size = size;

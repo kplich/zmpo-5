@@ -2,19 +2,22 @@
 #include "AlgorithmAction.h"
 #include <iostream>
 
-AlgorithmAction::AlgorithmAction(Algorithm* algorithm_instance)
+template<class T>
+AlgorithmAction<T>::AlgorithmAction(Algorithm<T>* algorithm_instance)
 {
 	this->algorithm_instance = algorithm_instance;
 }
 
-void AlgorithmAction::perform_action() const
+template<class T>
+void AlgorithmAction<T>::perform_action() const
 {
 	//TODO: memory leak here???
-	Individual* result = algorithm_instance->solve();
+	Individual<T>* result = algorithm_instance->solve();
 	std::cout << "Best found: " << result->to_string();
 }
 
-void AlgorithmAction::perform_action(Individual* result) const
+template<class T>
+void AlgorithmAction<T>::perform_action(Individual<T>* result) const
 {
 	result = algorithm_instance->solve();
 }
