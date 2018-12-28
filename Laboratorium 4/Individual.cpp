@@ -3,8 +3,8 @@
 #include <random>
 #include <sstream>
 
-
-Individual::Individual(int size, KnapsackProblem* problem_instance)
+template<>
+Individual<bool>::Individual(int size, KnapsackProblem* problem_instance)
 {
 	this->problem_instance = problem_instance;
 	this->size = size;
@@ -23,17 +23,59 @@ Individual::Individual(int size, KnapsackProblem* problem_instance)
 	this->fitness = problem_instance->evaluate_fitness(genotype);
 }
 
-Individual::Individual(Individual& other)
+template <>
+Individual<int>::Individual(int size, KnapsackProblem* problem_instance)
+{
+	this->problem_instance = problem_instance;
+	this->size = size;
+
+	std::random_device device;
+	std::mt19937 generator(device());
+	std::uniform_int_distribution<> distribution(0); //default max integer value
+
+	genotype = new int[size];
+
+	for(int i = 0; i < size; i++)
+	{
+		genotype[i] = distribution(generator);
+	}
+
+	this->fitness = problem_instance->evaluate_fitness(genotype);
+}
+
+template <>
+Individual<double>::Individual(int size, KnapsackProblem* problem_instance)
+{
+	this->problem_instance = problem_instance;
+	this->size = size;
+
+	std::random_device device;
+	std::mt19937 generator(device());
+	std::uniform_real_distribution<> distribution(0, std::random_device::max());
+
+	for(int i = 0; i < size; i++)
+	{
+		genotype[i] = distribution(generator);
+	}
+
+	this->fitness = problem_instance->evaluate_fitness(genotype);
+}
+
+
+template<class T>
+Individual<T>::Individual(Individual<T>& other)
 {
 	copy_from_another(other);
 }
 
-Individual::~Individual()
+template<class T>
+Individual<T>::~Individual()
 {
 	delete[] genotype;
 }
 
-void Individual::mutate(double mutation_probability)
+template<>
+void Individual<bool>::mutate(double mutation_probability)
 {
 	std::random_device device;
 	std::mt19937 generator(device());
@@ -46,16 +88,89 @@ void Individual::mutate(double mutation_probability)
 		}
 	}
 
-	this->fitness = problem_instance->evaluate_fitness(genotype);
+	fitness = problem_instance->evaluate_fitness(genotype);
 }
 
-std::pair<Individual*, Individual*> Individual::crossover(Individual* other, double crossover_probability)
+template<>
+void Individual<int>::mutate(double mutation_probability)
 {
 	std::random_device device;
 	std::mt19937 generator(device());
 
-	Individual* first = new Individual(*this);
-	Individual* second = new Individual(*other);
+	for (int i = 0; i < size; i++)
+	{
+		double random_temp = std::generate_canonical<double, 10>(generator);
+
+		//here we just mutate
+		if (random_temp < mutation_probability)
+		{
+			//here we decrease the gene
+			if(random_temp < mutation_probability/2)
+			{
+				//only if it's greater than 0
+				if(genotype[i] > 0)
+				{
+					genotype[i]--;
+				}
+			}
+			//here we increase the gene
+			else
+			{
+				genotype[i]++;
+			}
+			
+		}
+	}
+
+	fitness = problem_instance->evaluate_fitness(genotype);
+}
+
+template<>
+void Individual<double>::mutate(double mutation_probability)
+{
+	std::random_device device;
+	std::mt19937 generator(device());
+
+	for (int i = 0; i < size; i++)
+	{
+		double random_temp = std::generate_canonical<double, 10>(generator);
+
+		//here we just mutate
+		if (random_temp < mutation_probability)
+		{
+			//here we decrease the gene
+			if (random_temp < mutation_probability / 2)
+			{
+				//only if it's greater than 0.5
+				if (genotype[i] > 0.5)
+				{
+					genotype[i] -= 0.5;
+				}
+				else
+				{
+					genotype[i] = 0;
+				}
+			}
+			//here we increase the gene
+			else
+			{
+				genotype[i] += 0.5;
+			}
+
+		}
+	}
+
+	fitness = problem_instance->evaluate_fitness(genotype);
+}
+
+template<class T>
+std::pair<Individual<T>*, Individual<T>*> Individual<T>::crossover(Individual<T>* other, double crossover_probability)
+{
+	std::random_device device;
+	std::mt19937 generator(device());
+
+	Individual<T>* first = new Individual<T>(*this);
+	Individual<T>* second = new Individual<T>(*other);
 
 	if(std::generate_canonical<double, 10>(generator) < crossover_probability)
 	{
@@ -65,7 +180,7 @@ std::pair<Individual*, Individual*> Individual::crossover(Individual* other, dou
 		//swap genes for each gene, from the cutting point to the end
 		for(int i = cutting_point; i < size; i++)
 		{
-			bool temp = first->genotype[i];
+			T temp = first->genotype[i];
 			first->genotype[i] = second->genotype[i];
 			second->genotype[i] = temp;
 		}
@@ -74,11 +189,12 @@ std::pair<Individual*, Individual*> Individual::crossover(Individual* other, dou
 	first->fitness = problem_instance->evaluate_fitness(genotype);
 	second->fitness = problem_instance->evaluate_fitness(genotype);
 
-	std::pair<Individual*, Individual*>	result(first, second);
+	std::pair<Individual<T>*, Individual<T>*> result(first, second);
 	return result;
 }
 
-std::string Individual::to_string()
+template<class T>
+std::string Individual<T>::to_string()
 {
 	std::stringstream sstream;
 
@@ -92,24 +208,27 @@ std::string Individual::to_string()
 	return sstream.str();
 }
 
-int Individual::get_fitness()
+template<class T>
+int Individual<T>::get_fitness()
 {
 	return fitness;
 }
 
-Individual& Individual::operator=(const Individual& other)
+template<class T>
+Individual<T>& Individual<T>::operator=(const Individual<T>& other)
 {
 	copy_from_another(other);
 	return *this;
 }
 
-Individual& Individual::operator+(const Individual& other)
+template<class T>
+Individual<T>& Individual<T>::operator+(const Individual<T>& other)
 {
 	std::random_device device;
 	std::mt19937 generator(device());
 	std::uniform_int_distribution<> distribution(1, size - 1);
 
-	Individual* child = new Individual(*this);
+	Individual<T>* child = new Individual<T>(*this);
 
 	int cutting_point = distribution(generator);
 
@@ -124,12 +243,14 @@ Individual& Individual::operator+(const Individual& other)
 	return *child;
 }
 
-void Individual::operator++()
+template<class T>
+void Individual<T>::operator++()
 {
 	this->mutate(0.5);
 }
 
-void Individual::copy_from_another(const Individual& other)
+template<class T>
+void Individual<T>::copy_from_another(const Individual<T>& other)
 {
 	//clean up old data
 	delete[] this->genotype;
@@ -145,8 +266,4 @@ void Individual::copy_from_another(const Individual& other)
 	{
 		genotype[i] = other.genotype[i];
 	}
-
-	//a little quirk - copying will introduce mutations
-	//with a very small probability
-	this->mutate(0.00001);
 }

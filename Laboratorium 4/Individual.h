@@ -9,6 +9,7 @@
  * \brief Class encoding a possible solution to a problem. Equipped with
  *        methods allowing mutation and crossing with other individuals.
  */
+template<class T>
 class Individual
 {
 public:
@@ -20,13 +21,13 @@ public:
 	 */
 	explicit Individual(int size, KnapsackProblem* problem_instance);
 
-	Individual(Individual& other);
+	Individual(Individual<T>& other);
 
 	~Individual();
 
-	Individual& operator= (const Individual& other);
+	Individual<T>& operator= (const Individual<T>& other);
 
-	Individual& operator+ (const Individual& other);
+	Individual<T>& operator+ (const Individual<T>& other);
 
 	void operator++();
 
@@ -44,7 +45,7 @@ public:
 	 * \return a vector containing individuals that share their genes with
 	 *		   both crossing-over individuals
 	 */
-	std::pair<Individual*, Individual*> crossover(Individual* other, double crossover_probability);
+	std::pair<Individual<T>*, Individual<T>*> crossover(Individual<T>* other, double crossover_probability);
 
 	std::string to_string();
 
@@ -56,7 +57,7 @@ private:
 	/**
 	 * Table encoding a solution to the problem.
 	 */
-	bool* genotype;
+	T* genotype;
 
 	/**
 	 * Length of the table encoding the solution.
