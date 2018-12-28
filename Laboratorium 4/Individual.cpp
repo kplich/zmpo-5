@@ -53,6 +53,8 @@ Individual<double>::Individual(int size, KnapsackProblem<double>* problem_instan
 	std::mt19937 generator(device());
 	std::uniform_real_distribution<> distribution(0, std::random_device::max());
 
+	genotype = new double[size];
+
 	for(int i = 0; i < size; i++)
 	{
 		genotype[i] = distribution(generator);
