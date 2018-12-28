@@ -19,6 +19,8 @@ Algorithm<T>::Algorithm(KnapsackProblem<T>* problem_instance, int iterations,
 	int population_size, double mutation_probability,
 	double crossover_probability, int execution_time)
 {
+	this->valid = true;
+
 	if(!problem_instance->is_valid() || problem_instance == nullptr)
 	{
 		print_error(INVALID_PROBLEM_INSTANCE);
@@ -63,8 +65,6 @@ Algorithm<T>::Algorithm(KnapsackProblem<T>* problem_instance, int iterations,
 	this->execution_time = execution_time;
 
 	this->population = new std::vector<Individual<T>*>();
-
-	this->valid = true;
 }
 
 template<class T>
@@ -88,12 +88,12 @@ Individual<T>* Algorithm<T>::solve()
 
 	do
 	{
-		std::cout << "generation nr " << iterations - counter + 1 << "\n";
+		//std::cout << "generation nr " << iterations - counter + 1 << "\n";
 
-		generate_population();
-		mutate_population();
+		this->generate_population();
+		this->mutate_population();
 
-		print_population();
+		this->print_population();
 
 		Individual<T>* best_in_iteration = find_best_in_iteration();
 		if (counter != iterations) {
