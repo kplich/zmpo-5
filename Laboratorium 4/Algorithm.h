@@ -5,10 +5,11 @@
 /**
  * Class containing the logic of a genetic algorithm.
  */
+template<class T>
 class Algorithm
 {
 public:
-	Algorithm(KnapsackProblem* problem_instance, int iterations = 20,
+	Algorithm(KnapsackProblem<T>* problem_instance, int iterations = 20,
 		int population_size = 100, double mutation_probability = 0.03,
 		double crossover_probability = 0.6, int execution_time = 60);
 	~Algorithm();
@@ -20,7 +21,7 @@ public:
 	 * \return pointer to an individual rated as best fitted after
 	 *		   a given amount of iterations.
 	 */
-	Individual* solve();
+	Individual<T>* solve();
 
 private:
 
@@ -33,12 +34,12 @@ private:
 	/**
 	 * Container for current population
 	 */
-	std::vector<Individual*>* population;
+	std::vector<Individual<T>*>* population;
 
 	/**
 	 * Pointer to an instance of a problem we attempt to solve.
 	 */
-	KnapsackProblem* problem_instance;
+	KnapsackProblem<T>* problem_instance;
 
 	//TODO: currently unused!
 	/**
@@ -73,6 +74,6 @@ private:
 
 	void kill_population();
 
-	Individual* find_best_in_iteration();
+	Individual<T>* find_best_in_iteration();
 };
 

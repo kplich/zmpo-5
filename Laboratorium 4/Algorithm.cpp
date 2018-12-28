@@ -14,7 +14,8 @@ const std::string INVALID_MUTATION_PROBABILITY = "Mutation probability out of ra
 const std::string INVALID_CROSSOVER_PROBABILITY = "Crossover probability out of range.";
 const std::string INVALID_EXECUTION_TIME = "Invalid execution time.";
 
-Algorithm::Algorithm(KnapsackProblem* problem_instance, int iterations,
+template<class T>
+Algorithm<T>::Algorithm(KnapsackProblem<T>* problem_instance, int iterations,
 	int population_size, double mutation_probability,
 	double crossover_probability, int execution_time)
 {
@@ -61,22 +62,24 @@ Algorithm::Algorithm(KnapsackProblem* problem_instance, int iterations,
 	this->crossover_probability = crossover_probability;
 	this->execution_time = execution_time;
 
-	this->population = new std::vector<Individual*>();
+	this->population = new std::vector<Individual<T>*>();
 
 	this->valid = true;
 }
 
-Algorithm::~Algorithm()
+template<class T>
+Algorithm<T>::~Algorithm()
 {
 	delete population;
 }
 
-Individual* Algorithm::solve()
+template<class T>
+Individual<T>* Algorithm<T>::solve()
 {
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 	std::chrono::steady_clock::time_point after_iteration;
 	int counter = iterations;
-	Individual* best_ever = nullptr;
+	Individual<T>* best_ever = nullptr;
 
 	if (!this->valid) {
 		print_error(INVALID_ALGORITHM_INSTANCE);
@@ -92,19 +95,19 @@ Individual* Algorithm::solve()
 
 		print_population();
 
-		Individual* best_in_iteration = find_best_in_iteration();
+		Individual<T>* best_in_iteration = find_best_in_iteration();
 		if (counter != iterations) {
 			if (best_in_iteration->get_fitness() > best_ever->get_fitness())
 			{
 				//old best_ever is copied, because it's no longer necessary
 				delete best_ever;
 				//new best_ever is copied, because it has to outlive its generation
-				best_ever = new Individual(*best_in_iteration);
+				best_ever = new Individual<T>(*best_in_iteration);
 			}
 		}
 		else
 		{
-			best_ever = new Individual(*best_in_iteration);
+			best_ever = new Individual<T>(*best_in_iteration);
 		}
 
 		std::cout << "best in generation, fitness: " << best_in_iteration->get_fitness() << "\n\n";
@@ -116,20 +119,21 @@ Individual* Algorithm::solve()
 	return best_ever;
 }
 
-void Algorithm::generate_population()
+template<class T>
+void Algorithm<T>::generate_population()
 {
 	if (population->empty())
 	{
 		for(int i = 0; i<population_size; i++)
 		{
-			Individual* temp = new Individual(problem_instance->get_number_of_items(), problem_instance);
+			Individual<T>* temp = new Individual<T>(problem_instance->get_number_of_items(), problem_instance);
 			population->push_back(temp);
 		}
 	}
 	else
 	{
 		//set up a new vector
-		std::vector<Individual*>* new_population = new std::vector<Individual*>();
+		std::vector<Individual<T>*>* new_population = new std::vector<Individual<T>*>();
 
 		//set up RNG
 		std::random_device device;
@@ -140,14 +144,14 @@ void Algorithm::generate_population()
 		while (new_population->size() < population_size)
 		{
 			//get four random individuals
-			Individual* first = population->at(distribution(generator));
-			Individual*second = population->at(distribution(generator));
-			Individual*third = population->at(distribution(generator));
-			Individual*fourth = population->at(distribution(generator));
+			Individual<T>* first = population->at(distribution(generator));
+			Individual<T>* second = population->at(distribution(generator));
+			Individual<T>* third = population->at(distribution(generator));
+			Individual<T>* fourth = population->at(distribution(generator));
 
 			//assign them to roles of first parent and second parent
-			Individual* first_parent;
-			Individual* second_parent;
+			Individual<T>* first_parent;
+			Individual<T>* second_parent;
 			if(first->get_fitness() >= second->get_fitness())
 			{
 				first_parent = first;
@@ -167,11 +171,11 @@ void Algorithm::generate_population()
 			}
 
 			//cross individuals over and get their children
-			std::pair<Individual*, Individual*> children = first_parent->crossover(second_parent, crossover_probability);
+			std::pair<Individual<T>*, Individual<T>*> children = first_parent->crossover(second_parent, crossover_probability);
 
 			//evaluate children
-			Individual* first_child = children.first;
-			Individual* second_child = children.second;
+			Individual<T>* first_child = children.first;
+			Individual<T>* second_child = children.second;
 
 			new_population->push_back(first_child);
 			new_population->push_back(second_child);
@@ -187,27 +191,30 @@ void Algorithm::generate_population()
 	}
 }
 
-void Algorithm::mutate_population()
+template<class T>
+void Algorithm<T>::mutate_population()
 {
 	for(int i = 0; i < population_size; i++)
 	{
-		Individual* temp = population->at(i);
+		Individual<T>* temp = population->at(i);
 		temp->mutate(mutation_probability);
 	}
 }
 
-void Algorithm::print_population()
+template<class T>
+void Algorithm<T>::print_population()
 {
 	for (int i = 0; i < population->size(); i++)
 	{
-		Individual* temp = population->at(i);
+		Individual<T>* temp = population->at(i);
 		std::cout << temp->to_string();
 	}
 
 	std::cout << "\n";
 }
 
-void Algorithm::kill_population()
+template<class T>
+void Algorithm<T>::kill_population()
 {
 	for (int i = 0; i < population->size(); i++)
 	{
@@ -216,14 +223,15 @@ void Algorithm::kill_population()
 
 }
 
-Individual* Algorithm::find_best_in_iteration()
+template<class T>
+Individual<T>* Algorithm<T>::find_best_in_iteration()
 {
-	Individual* best = population->at(0);
+	Individual<T>* best = population->at(0);
 	int max_fitness = population->at(0)->get_fitness();
 
 	for(int i = 1; i < population_size; i++)
 	{
-		Individual* temp = population->at(i);
+		Individual<T>* temp = population->at(i);
 		if(temp->get_fitness() > max_fitness)
 		{
 			best = temp;
