@@ -9,6 +9,7 @@
  * Items aren't stored in map, because ordering of items is
  * an important issue that can significantly alter the solution quality.
  */
+template<class T>
 class KnapsackProblem
 {
 public:
@@ -28,7 +29,7 @@ public:
 
 	std::string to_string();
 
-	int evaluate_fitness(bool* genotype);
+	double evaluate_fitness(T* genotype);
 
 private:
 	/**

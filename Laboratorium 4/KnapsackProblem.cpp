@@ -10,7 +10,8 @@ const std::string INVALID_CAPACITY_ERROR = "Invalid capacity of the knapsack.";
 const std::string INVALID_ITEM_SIZE_ERROR = "Invalid size of an item.";
 const std::string INVALID_ITEM_VALUE_ERROR = "Invalid value of an item.";
 
-KnapsackProblem::KnapsackProblem(int capacity, std::vector<std::pair<int, int>*>* items)
+template<class T>
+KnapsackProblem<T>::KnapsackProblem(int capacity, std::vector<std::pair<int, int>*>* items)
 {
 	this->capacity = capacity;
 	this->items = items;
@@ -21,7 +22,8 @@ KnapsackProblem::KnapsackProblem(int capacity, std::vector<std::pair<int, int>*>
 	}
 }
 
-KnapsackProblem::~KnapsackProblem()
+template<class T>
+KnapsackProblem<T>::~KnapsackProblem()
 {
 	for (int i = 0; i < items->size(); i++)
 	{
@@ -31,7 +33,8 @@ KnapsackProblem::~KnapsackProblem()
 	delete items;
 }
 
-KnapsackProblem::KnapsackProblem(std::ifstream* source_file)
+template<class T>
+KnapsackProblem<T>::KnapsackProblem(std::ifstream* source_file)
 {
 	if (!load_from_file(source_file))
 	{
@@ -41,17 +44,20 @@ KnapsackProblem::KnapsackProblem(std::ifstream* source_file)
 	}
 }
 
-int KnapsackProblem::get_number_of_items()
+template<class T>
+int KnapsackProblem<T>::get_number_of_items()
 {
 	return items->size();
 }
 
-bool KnapsackProblem::is_valid()
+template<class T>
+bool KnapsackProblem<T>::is_valid()
 {
 	return valid;
 }
 
-std::string KnapsackProblem::to_string()
+template<class T>
+std::string KnapsackProblem<T>::to_string()
 {
 	std::stringstream sstream;
 
@@ -67,17 +73,18 @@ std::string KnapsackProblem::to_string()
 	return sstream.str();
 }
 
-int KnapsackProblem::evaluate_fitness(bool* genotype)
+template<class T>
+double KnapsackProblem<T>::evaluate_fitness(T* genotype)
 {
-	int value = 0;
-	int size = 0;
+	double value = 0;
+	double size = 0;
 
 	for (int i = 0; i < get_number_of_items(); i++)
 	{
 		if (genotype[i])
 		{
-			size += items->at(i)->first;
-			value += items->at(i)->second;
+			size  += ((double) genotype[i]) * items->at(i)->first;
+			value += ((double) genotype[i]) * items->at(i)->second;
 		}
 	}
 
@@ -89,7 +96,8 @@ int KnapsackProblem::evaluate_fitness(bool* genotype)
 	return value;
 }
 
-bool KnapsackProblem::load_from_file(std::ifstream* source_file)
+template<class T>
+bool KnapsackProblem<T>::load_from_file(std::ifstream* source_file)
 {
 	//we assume that loading will not succeed
 	this->valid = false;
@@ -161,7 +169,8 @@ bool KnapsackProblem::load_from_file(std::ifstream* source_file)
 	return true;
 }
 
-std::pair<int, int>* KnapsackProblem::get_size_value_pair(std::string line, int line_number)
+template<class T>
+std::pair<int, int>* KnapsackProblem<T>::get_size_value_pair(std::string line, int line_number)
 {
 	int size = -1;
 	int value = -1;
