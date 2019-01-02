@@ -116,6 +116,8 @@ Individual<T>* Algorithm<T>::solve()
 
 	kill_population();
 
+	this->valid = false;
+
 	return best_ever;
 }
 

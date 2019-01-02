@@ -13,7 +13,10 @@ void AlgorithmAction<T>::perform_action() const
 {
 	//TODO: memory leak here???
 	Individual<T>* result = algorithm_instance->solve();
-	std::cout << "Best found: " << result->to_string();
+
+	if (result != nullptr) {
+		std::cout << "Best found: " << result->to_string();
+	}
 }
 
 template<class T>
