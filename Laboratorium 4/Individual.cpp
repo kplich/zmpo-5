@@ -4,10 +4,11 @@
 #include <sstream>
 
 template<>
-Individual<bool>::Individual(int size, KnapsackProblem<bool>* problem_instance)
+Individual<bool>::Individual(int size, KnapsackProblem<bool>* problem_instance, double mutation_probability)
 {
 	this->problem_instance = problem_instance;
 	this->size = size;
+	this->mutation_probability = mutation_probability;
 
 	std::random_device device;
 	std::mt19937 generator(device());
@@ -24,10 +25,11 @@ Individual<bool>::Individual(int size, KnapsackProblem<bool>* problem_instance)
 }
 
 template <>
-Individual<int>::Individual(int size, KnapsackProblem<int>* problem_instance)
+Individual<int>::Individual(int size, KnapsackProblem<int>* problem_instance, double mutation_probability)
 {
 	this->problem_instance = problem_instance;
 	this->size = size;
+	this->mutation_probability = mutation_probability;
 
 	std::random_device device;
 	std::mt19937 generator(device());
@@ -44,10 +46,11 @@ Individual<int>::Individual(int size, KnapsackProblem<int>* problem_instance)
 }
 
 template <>
-Individual<double>::Individual(int size, KnapsackProblem<double>* problem_instance)
+Individual<double>::Individual(int size, KnapsackProblem<double>* problem_instance, double mutation_probability)
 {
 	this->problem_instance = problem_instance;
 	this->size = size;
+	this->mutation_probability = mutation_probability;
 
 	std::random_device device;
 	std::mt19937 generator(device());
@@ -63,7 +66,6 @@ Individual<double>::Individual(int size, KnapsackProblem<double>* problem_instan
 	this->fitness = problem_instance->evaluate_fitness(genotype);
 }
 
-
 template<class T>
 Individual<T>::Individual(Individual<T>& other)
 {
@@ -77,7 +79,7 @@ Individual<T>::~Individual()
 }
 
 template<>
-void Individual<bool>::mutate(double mutation_probability)
+void Individual<bool>::mutate()
 {
 	std::random_device device;
 	std::mt19937 generator(device());
@@ -94,7 +96,7 @@ void Individual<bool>::mutate(double mutation_probability)
 }
 
 template<>
-void Individual<int>::mutate(double mutation_probability)
+void Individual<int>::mutate() 
 {
 	std::random_device device;
 	std::mt19937 generator(device());
@@ -128,7 +130,7 @@ void Individual<int>::mutate(double mutation_probability)
 }
 
 template<>
-void Individual<double>::mutate(double mutation_probability)
+void Individual<double>::mutate()
 {
 	std::random_device device;
 	std::mt19937 generator(device());
@@ -246,9 +248,9 @@ Individual<T>& Individual<T>::operator+(const Individual<T>& other)
 }
 
 template<class T>
-void Individual<T>::operator++()
+void Individual<T>::operator++(int none)
 {
-	this->mutate(0.5);
+	this->mutate();
 }
 
 template<class T>
@@ -262,6 +264,7 @@ void Individual<T>::copy_from_another(const Individual<T>& other)
 	this->size = other.size;
 	this->fitness = other.fitness;
 	this->genotype = new T[size];
+	this->mutation_probability = other.mutation_probability;
 
 	//copy data
 	for(int i = 0; i < size; i++)

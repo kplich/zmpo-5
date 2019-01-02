@@ -11,7 +11,7 @@ class Algorithm
 public:
 	Algorithm(KnapsackProblem<T>* problem_instance, int iterations = 20,
 		int population_size = 100, double mutation_probability = 0.03,
-		double crossover_probability = 0.6, int execution_time = 60);
+		double crossover_probability = 0.6, int execution_time = 10);
 	~Algorithm();
 
 	/**

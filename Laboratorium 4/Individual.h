@@ -19,7 +19,7 @@ public:
 	 * a randomly initialized genotype.
 	 * \param size length of the table encoding the solution (genotype)
 	 */
-	explicit Individual(int size, KnapsackProblem<T>* problem_instance);
+	explicit Individual(int size, KnapsackProblem<T>* problem_instance, double mutation_probability);
 
 	Individual(Individual<T>& other);
 
@@ -29,14 +29,12 @@ public:
 
 	Individual<T>& operator+ (const Individual<T>& other);
 
-	void operator++();
+	void operator++(int);
 
 	/**
 	 * \brief Mutates every gene of the individual
-	 * \param mutation_probability probability (same for every gene) that it
-	 *		  will mutate
 	 */
-	void mutate(double mutation_probability);
+	void mutate();
 
 	/**
 	 * \brief Performs a crossover with another individual.
@@ -53,6 +51,8 @@ public:
 
 private:
 	KnapsackProblem<T>* problem_instance;
+
+	double mutation_probability;
 
 	/**
 	 * Table encoding a solution to the problem.

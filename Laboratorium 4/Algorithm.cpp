@@ -33,7 +33,7 @@ Algorithm<T>::Algorithm(KnapsackProblem<T>* problem_instance, int iterations,
 		this->valid = false;
 	}
 
-	if(population_size <= 0 || population_size % 2 == 1)
+	if(population_size <= 0)
 	{
 		print_error(INVALID_POPULATION_SIZE);
 		this->valid = false;
@@ -76,8 +76,8 @@ Algorithm<T>::~Algorithm()
 template<class T>
 Individual<T>* Algorithm<T>::solve()
 {
-	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-	std::chrono::steady_clock::time_point after_iteration;
+	const std::chrono::steady_clock::time_point beginning = std::chrono::steady_clock::now();
+	std::chrono::duration<double> time_passed;
 	int counter = iterations;
 	Individual<T>* best_ever = nullptr;
 
@@ -88,8 +88,6 @@ Individual<T>* Algorithm<T>::solve()
 
 	do
 	{
-		//std::cout << "generation nr " << iterations - counter + 1 << "\n";
-
 		this->generate_population();
 		this->mutate_population();
 
@@ -112,7 +110,9 @@ Individual<T>* Algorithm<T>::solve()
 
 		std::cout << "best in generation, fitness: " << best_in_iteration->get_fitness() << "\n\n";
 		counter--;
-	} while (counter > 0);
+
+		time_passed = std::chrono::steady_clock::now() - beginning;
+	} while (time_passed.count() < execution_time);
 
 	kill_population();
 
@@ -128,7 +128,7 @@ void Algorithm<T>::generate_population()
 	{
 		for(int i = 0; i<population_size; i++)
 		{
-			Individual<T>* temp = new Individual<T>(problem_instance->get_number_of_items(), problem_instance);
+			Individual<T>* temp = new Individual<T>(problem_instance->get_number_of_items(), problem_instance, mutation_probability);
 			population->push_back(temp);
 		}
 	}
@@ -142,45 +142,18 @@ void Algorithm<T>::generate_population()
 		std::mt19937 generator(device());
 		std::uniform_int_distribution<> distribution(0, population_size - 1);
 
+
 		//generate new individuals until we reach desired population size
 		while (new_population->size() < population_size)
 		{
-			//get four random individuals
-			Individual<T>* first = population->at(distribution(generator));
-			Individual<T>* second = population->at(distribution(generator));
-			Individual<T>* third = population->at(distribution(generator));
-			Individual<T>* fourth = population->at(distribution(generator));
+			//get two random individuals
+			Individual<T> first = *(population->at(distribution(generator)));
+			Individual<T> second = *(population->at(distribution(generator)));
 
-			//assign them to roles of first parent and second parent
-			Individual<T>* first_parent;
-			Individual<T>* second_parent;
-			if(first->get_fitness() >= second->get_fitness())
-			{
-				first_parent = first;
-			}
-			else
-			{
-				first_parent = second;
-			}
+			//cross individuals over and get their child
+			Individual<T>* child = &(first + second);
 
-			if(third->get_fitness() >= fourth->get_fitness())
-			{
-				second_parent = third;
-			}
-			else
-			{
-				second_parent = fourth;
-			}
-
-			//cross individuals over and get their children
-			std::pair<Individual<T>*, Individual<T>*> children = first_parent->crossover(second_parent, crossover_probability);
-
-			//evaluate children
-			Individual<T>* first_child = children.first;
-			Individual<T>* second_child = children.second;
-
-			new_population->push_back(first_child);
-			new_population->push_back(second_child);
+			new_population->push_back(child);
 		}
 
 		kill_population();
@@ -198,8 +171,7 @@ void Algorithm<T>::mutate_population()
 {
 	for(int i = 0; i < population_size; i++)
 	{
-		Individual<T>* temp = population->at(i);
-		temp->mutate(mutation_probability);
+		( *(population->at(i)) )++;
 	}
 }
 
